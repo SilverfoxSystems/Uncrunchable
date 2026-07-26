@@ -421,6 +421,15 @@ export class NumLab {
 
     }
 
+    #enlargeArray(ar, buffSz) {
+
+        // var tmp = new Array(buffSz + 1)
+        var tmp = new Uint32Array(buffSz + 1)
+        //var tmp = new Int32Array(buffSz + 1)
+        tmp.set(ar, 0)
+        ar = tmp
+        //    return 
+    }
 
     #array32toN(dwords) {
         this.rezult = 0n
@@ -440,11 +449,15 @@ export class NumLab {
         //rezult = -0x700000000000000011111111111111111111122222222222222222222222222888888888888888888888888888888888888888n
 
         //    var bytes = []// Uint8Array// = Number(rezult & 0xffn);
-        var dwords = new Int32Array(8)
-        // var dwords = []
+        var lenn = this.#countDwords()
+
+        // var dwords = new Int32Array(lenn)
+        var dwords = new Uint32Array(lenn)
+
+        //var dwords = []
         //for (let i = bsN - 2; i >= 0; i--) {
         var i = 0
-      //  document.getElementById("Text11").innerHTML += "<br /> "
+        // document.getElementById("Text11").innerHTML += "<br /> "
         NumLab.#signSt = false
 
         var ost = 0
@@ -467,8 +480,12 @@ export class NumLab {
             // dwords.push(!Number(rezult & 0xffffffffn));
 
             // } else {
+
             dwords[i] = (Number(this.rezult & 0xffffffffn));
-            //dwords.push(Number(rezult & 0xffffffffn));
+
+            //--dwords.push(Number(this.rezult & 0xffffffffn));
+
+
             //if ((dwords[i] & 0x80000000) & (i>0)) dwords[i-1]++
             //if ((dwords[i]<0) & (i>0)) dwords[i-1]++
 
@@ -478,6 +495,8 @@ export class NumLab {
             this.rezult >>= 32n
             //                    document.getElementById("Text11").innerHTML += " " + dwords[i].toString(16)
             i++
+            if (i > dwords.length) { this.#enlargeArray(dwords, dwords.length + 8) }
+            //   }
         }
 
         dwords.reverse()
@@ -624,22 +643,20 @@ export class NumLab {
         }
     }
 
-DirectConvertArray32(ar, nd, EntryLvl, OutputLvl) {
+    DirectConvertArray32(ar, nd, EntryLvl, OutputLvl) {
 
         NumLab.#bal2unSgn(ar)
 
         this.#array32toN(ar)
 
-    this.DirectConvert(nd, BigInt(EntryLvl), BigInt(OutputLvl))
+        this.DirectConvert(nd, BigInt(EntryLvl), BigInt(OutputLvl))
+        //this.DirectConvert(nd, BigInt(OutputLvl), BigInt(EntryLvl))
 
-
-    //var ar1 = new Uint32Array(ar.length)
-
-    ar = this.#n2array32()
-
+        ar = this.#n2array32()
         NumLab.#unSgn2bal(ar)
 
-        //return ar1
+        return ar
+
     }
 
 }
