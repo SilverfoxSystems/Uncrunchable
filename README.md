@@ -8,7 +8,7 @@ NumLab can be tested [on this webpage](http://1zz.online/NumLab/index.html)
 Read discussion on forum: https://masm32.com/board/index.php?topic=13322.0
 
 
-You may not reproduce, redistribute or recompile this code, but you are allowed to use the crypting mechanism from an external source. Please see **TestEncryptData.html** for an example on how to do that. This is still under development, it wasn't thoroughly tested.
+You may not reproduce, distribute or recompile any part of this code, but you are allowed to use the crypting mechanism from an external source. Please see **TestEncryptData.html** for an example on how to do that. This is still under development, it wasn't thoroughly tested.
 You may also use functions in _NumLab.js_, which can be reffered to via script import from "http://1zz.online/NumLab/NumLab.js". See the examples in **index.html** on this Git repository.
 
 As a note, I also have a way of "unifying"/"vectorizing" floating point arbitrary precision numbers.
