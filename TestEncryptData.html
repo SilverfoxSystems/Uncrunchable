@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    
+</head>
+<body onload="encryptTest()">
+
+    <br />
+    Use this underlying JS function to encrypt and decrypt a Uint32Array.
+    <br />
+    The last element in the Uint32Array must be non-zero.
+    <br />
+
+
+    <script type="module">
+        window.encryptTest = encryptTest
+
+
+        import { uncrunchable } from "http://1zz.online/NumLab/uncrunchable.js"
+
+
+        export function encryptTest() {
+
+            var arr = new Uint32Array([0x123456, 0x2345678, 0x7fffffff, 0x7fffffff, 0x80000000, 0x80000000, 0xffffffff])
+
+            var arr1 = uncrunchable.Encrypt(arr, 7, 4, 3)
+// arr1 holds the encrypted version of array
+
+            var arr2 = uncrunchable.Decrypt(arr1, 7, 4, 3)
+//here arr2 equals arr
+
+        }
+    </script>
+
+</body>
+</html>
