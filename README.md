@@ -9,3 +9,6 @@ Read discussion on forum: https://masm32.com/board/index.php?topic=13322.0
 
 
 You may not reproduce or recompile this code, but you are allowed to use the crypting mechanism from an external source. Please see **TestEncryptData.html** for an example on how to do that. This is still under development, it wasn't thoroughly tested.
+
+
+Any questions, suggestions or comments are welcome in the _Discussions_ section
