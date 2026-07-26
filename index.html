@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 
-    <html>
+<html>
 <head>
     <meta charset="utf-8" />
     <title>Unifier</title>
     <meta name="description" content="Unify numbers" />
-    <meta name="keywords" content="Numbers, Combine, Dimensions, Pack, Vectorize" />
-    <script src="NumLab.js" defer></script>
+    <meta name="keywords" content="Numbers, Combine, Dimensions, Pack, Vectorize, Decompose, Convert" />
 
 </head>
 <body onload="ldUp()">
@@ -51,7 +50,7 @@
         Resolves in <i>Base #1</i>,
 
         <br />
-        unifies in <i>Base #2</i>.
+        unifies the resulting coordinates using <i>Base #2</i>.
         <br />
         Overwrites the value in the bottom textbox.
         <br />
@@ -65,10 +64,26 @@
         <br />
         All numbers can also be entered in hexadecimal.
         <br />
+        <br />
+        <br />
+        Encryption/Decryption based on Direct Convert function is available, also a Windows app (alond with .dll library) is nearly ready, which runs faster than the web app. Still, it takes about 5 seconds to encrypt around 50 kB of data. Windows app won't be free. Online app will remain free.'
 
     </div>
 
-    <script>
+    <script type="module">
+
+        import { NumLab } from "./NumLab.js"
+
+
+
+        window.unify = unify
+        window.ldUp = ldUp
+        window.resolve = resolve
+        window.dConv = dConv
+
+        window.showHlp = showHlp
+        window.xchgLvl = xchgLvl
+
 
         //<a href="javascript:openTab('tabUnify')">Unify</a>
 
@@ -76,7 +91,7 @@
         //<td><a href="javascript:openTab('tabDConvert')">Direct Convert</a></td>
         //<td><a href="javascript:openTab('tabCrypt')">File encryption</a></td>
 
-        function showHlp(ev) {
+        export function showHlp(ev) {
             //ev.preventDefault()
             document.getElementById("help").style.display = "block"
 
@@ -84,7 +99,7 @@
 
         }
 
-        function xchgLvl(ev) {
+        export function xchgLvl(ev) {
 
 
             ev.preventDefault()
@@ -100,7 +115,7 @@
 
         }
 
-        function dConv(ev) {
+        export function dConv(ev) {
 
             //var kuracodovce=5
             ev.preventDefault()
@@ -146,8 +161,7 @@
 
 
 
-
-        function unify(ev) {
+        export function unify(ev) {
             ev.preventDefault()
             const unc = new NumLab
 
@@ -198,7 +212,7 @@
 
         }
 
-        function resolve(ev) {
+        export function resolve(ev) {
             const unc = new NumLab;
             var el = document.getElementById("n1");
             const txLvl = document.getElementById("lvl");
@@ -256,7 +270,7 @@
 
 
 
-        function ldUp() {
+        export function ldUp() {
             var input = document.getElementById('Text1');
 
             input.addEventListener('keydown', function (event) {
@@ -283,27 +297,9 @@
 
         }
 
-        function switchDC() {
-            const el = document.getElementById("chkDConv")
-            if (el.checked) {
-                div.style.display = "Block"
-            } else {
-                div.style.display = "none"
 
-            }
 
-        }
 
-        function switchTab(el, which) {
-            const div = document.getElementById(which)
-            if (el.checked) {
-                div.style.display = "Block"
-            } else {
-                div.style.display = "none"
-
-            }
-    
-        }
     </script>
 
 </body>
