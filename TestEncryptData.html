@@ -8,30 +8,54 @@
 <body onload="encryptTest()">
 
     <br />
-    Use this underlying JS function to encrypt and decrypt a Uint32Array.
+    Use this underlying JS function to encrypt and decrypt a Uint32Array or an ArrayBuffer.
     <br />
-    The last element in the Uint32Array must be non-zero.
+    The last element in the Uint32Array must be non-zero, zeroes on the end will be ignored.
+    <br />
+    ArrayBuffer has no limitations, other than it must not end with approximately 16000 zero-bytes.
     <br />
 
 
     <script type="module">
+        window.encryptTestArrayBuffer = encryptTestArrayBuffer
         window.encryptTest = encryptTest
 
 
         import { uncrunchable } from "http://1zz.online/NumLab/uncrunchable.js"
-// in case you need to fetch the script over a secure connection, replace the above line with the following one:
-//         import { uncrunchable } from "https://unifier-cqbucbhudmhfdjgt.westeurope-01.azurewebsites.net/uncrunchable.js"
+        // in case you need to fetch the script over a secure connection, replace the above line with the following one:
+        //         import { uncrunchable } from "https://unifier-cqbucbhudmhfdjgt.westeurope-01.azurewebsites.net/uncrunchable.js"
         
+
+        export function encryptTestArrayBuffer() {
+
+            const unc = new NumLab()
+            const currentByteLen = 27
+            let ba = new ArrayBuffer(currentByteLen, { maxByteLength: currentByteLen + 0xffff })
+
+            let vi = new DataView(ba)
+            vi.setUint8(0, 24)
+            vi.setUint8(10, 24)
+            vi.setUint8(20, 24)
+            vi.setUint8(5, 24)
+            vi.setUint8(25, 24)
+
+
+            let b = uncrunchable.Encrypt(ba, 3, 4, 5)
+
+            ba = uncrunchable.Decrypt(b, 3, 4, 5)
+            // "ba"" converts to same arrayBuffer
+        }
+
 
         export function encryptTest() {
 
             var arr = new Uint32Array([0x123456, 0x2345678, 0x7fffffff, 0x7fffffff, 0x80000000, 0x80000000, 0xffffffff])
 
             var arr1 = uncrunchable.Encrypt(arr, 7, 4, 3)
-// arr1 holds the encrypted version of array
+            // arr1 holds the encrypted version of array
 
             var arr2 = uncrunchable.Decrypt(arr1, 7, 4, 3)
-//here arr2 equals arr
+            //here arr2 equals arr
 
         }
     </script>
