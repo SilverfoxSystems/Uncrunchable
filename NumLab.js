@@ -1,7 +1,7 @@
 export class NumLab {
     static #signSt = false
 
-    #rezult = 0n
+    #rezult  = 0n
     #vel = 0
     #velPoz = 0
     #IXmax = 0
@@ -314,8 +314,11 @@ export class NumLab {
             if (NumLab.#signSt) ints[i] ^= 0xffffffff
             //   ost = 0n
             if (ost) {
-                if (ints[i + 1] == 0xffffffff) {
+                if (ints[i + 1] == 0x7fffffff) {
                     ost = 1
+                    ints[i + 1] = 0x80000000
+
+                } else if (ints[i + 1] == 0xffffffff) {
                     ints[i + 1] = 0
 
                 } else {
@@ -324,6 +327,8 @@ export class NumLab {
                     if (ints[i + 1] & 0x80000000) {
                         ost = 1
 
+                    } else {
+                        ost = 0
                     }
                 }
 
@@ -331,6 +336,8 @@ export class NumLab {
                 if (ints[i + 1] & 0x80000000) {
                     ost = 1
 
+                //} else {
+             //       ost=0
                 }
 
             }
@@ -374,9 +381,9 @@ export class NumLab {
             }
 
             if (ost) {
-                if (ints[i] == 0xa0000000) {
+                if (ints[i] == 0x00000000) {
                     ost = 1
-                    ints[i] = 0x7fffffff
+                    ints[i] = 0xffffffff
 
                 } else {
                     ost = 0
@@ -388,7 +395,7 @@ export class NumLab {
 
             //   ost = 0n
             if (ost) {
-                if (ints[i + 1] == 0xa0000000) {
+                if (ints[i + 1] == 0x80000000) {
                     ost = 1
                     ints[i + 1] = 0x7fffffff
 
@@ -405,6 +412,8 @@ export class NumLab {
                 if (ints[i + 1] & 0x80000000) {
                     ost = 1
 
+                } else {
+    //                ost=0
                 }
 
 
@@ -424,18 +433,31 @@ export class NumLab {
     #enlargeArray(ar, buffSz) {
 
         // var tmp = new Array(buffSz + 1)
-        var tmp = new Uint32Array(buffSz + 1)
+        var tmp = new Uint32Array(buffSz)// + 1)
         //var tmp = new Int32Array(buffSz + 1)
         tmp.set(ar, 0)
         ar = tmp
         //    return 
     }
 
+   static #shrinkArray(ar, buffSz) {
+
+        // var tmp = new Array(buffSz + 1)
+        var tmp = new Uint32Array(buffSz )
+        //var tmp = new Int32Array(buffSz + 1)
+        tmp.set(ar.subarray(0, buffSz), 0)
+       //ar =
+            return        tmp
+    }
+
     #array32toN(dwords) {
         this.rezult = 0n
         const l = dwords.length
-        for (var i = 0; i < l; i++) {
-            this.rezult = (this.rezult << 32n) + BigInt(dwords[i])
+        //for (var i = 0; i < l; i++) {
+        for (var i = l-1; i >= 0; i--) {
+            //this.rezult = (this.rezult << 32n) + dwords[i]
+            this.rezult <<= 32n
+            this.rezult +=  BigInt(dwords[i])
             // rezult += BigInt(dwords[i])
 
         }
@@ -451,13 +473,13 @@ export class NumLab {
         //    var bytes = []// Uint8Array// = Number(rezult & 0xffn);
         var lenn = this.#countDwords()
 
-        // var dwords = new Int32Array(lenn)
-        var dwords = new Uint32Array(lenn)
+       // var dwords = new Int32Array(lenn)
+       var dwords = new Uint32Array(lenn)
 
-        //var dwords = []
+         //var dwords = []
         //for (let i = bsN - 2; i >= 0; i--) {
         var i = 0
-        // document.getElementById("Text11").innerHTML += "<br /> "
+       // document.getElementById("Text11").innerHTML += "<br /> "
         NumLab.#signSt = false
 
         var ost = 0
@@ -496,10 +518,10 @@ export class NumLab {
             //                    document.getElementById("Text11").innerHTML += " " + dwords[i].toString(16)
             i++
             if (i > dwords.length) { this.#enlargeArray(dwords, dwords.length + 8) }
-            //   }
+         //   }
         }
 
-        dwords.reverse()
+        //dwords.reverse()
 
         return dwords
 
@@ -565,11 +587,11 @@ export class NumLab {
             throw new Error("Entry and output levels must not match.")
         };
 
-        if ((EntryLvl == 0) || (EntryLvl == 1)) {
-            throw new Error("Entry level cannot be less than two.")
+        if ((EntryLvl<3)) {
+            throw new Error("Entry level cannot be less than three.")
         }
-        if ((OutputLvl == 0) || (OutputLvl == 1)) {
-            throw new Error("Output level cannot be less than two.")
+        if ((OutputLvl <3)) {
+            throw new Error("Output level cannot be less than three.")
         }
 
         //rezult=h
@@ -643,7 +665,7 @@ export class NumLab {
         }
     }
 
-    DirectConvertArray32(ar, nd, EntryLvl, OutputLvl) {
+    DirectConvertArray32(ar, nd,EntryLvl,OutputLvl ) {
 
         NumLab.#bal2unSgn(ar)
 
@@ -658,6 +680,145 @@ export class NumLab {
         return ar
 
     }
+
+    countLeading0s(b) {
+        let u = b.byteLength
+        //let vi = new DataView(b)
+        let b0 = new Uint8Array(b)
+        var i = 0
+        for (i = u - 1; i >= 0; i--) {
+
+            //if (vi.getUint8[i]) break
+            if (b0[i]) break
+        }
+        return u-i-1
+    }
+
+    int32arr2bytes(ui32, leading0s) {
+        var uiCnt = ui32.length
+        var bCnt = uiCnt << 2
+        var tester = 255 << 24
+        var i = 0
+        var tested = ui32[ui32.length - 1]
+        for (i = 3; i >= 0; i--) {
+            if (tested & tester) break
+            tester >>= 8
+        }
+        var offset = 3 - i
+
+        //var arB = ui32.buffer
+        var arB = new ArrayBuffer(bCnt, {maxByteLength:bCnt+0xffff})// - offset + leading0s)
+        var vi = new DataView(arB)
+
+        for (i = 0; i < uiCnt; i++) {
+            //j = i << 2
+            vi.setUint32(i << 2, ui32[i], true)
+            //vi.get
+        }
+        //var bbbbbbbbb = new Uint8Array(arB)
+       // bbbbbbbbb.set(ui32,0)
+    
+        
+
+      var  dif = leading0s - offset
+        
+        if (dif) {
+
+           NumLab. #resizeBuff(arB, bCnt, - offset + leading0s)
+        }
+
+        return arB
+
+    }
+
+    static #resizeBuff(arB,currSize,dif) {
+
+         var vi;
+         const oldData = new Uint8Array(arB)
+
+         arB.resize(currSize+dif)
+vi = new Uint8Array(arB)
+if (dif < 0) {
+    vi.set(oldData.subarray(0, vi.length))
+
+} else if (dif > 0) {
+    vi.set(oldData)
+}
+
+    }
+
+    bytes2int32arr(b) {
+
+        
+        const bCnt = b.byteLength
+        var ost = bCnt & 3
+        //bCnt += 4 - ost
+        if (ost) {
+            NumLab.#resizeBuff(b, bCnt, +4 - ost+1)
+        }
+
+        var uiCnt =1+ Math.floor(bCnt / 4)
+
+        var ui32 = new Uint32Array(uiCnt)
+        var j = 0
+        var o = new DataView(b)
+        if (ost == 0) { uiCnt -= 1 }
+        //for (var i = uiCnt-1; i >= 0; i--) {
+            for (var i = 0; i < uiCnt; i++) {
+          //  j = i << 2
+            //ui32[i] = (o.getUint8(j + 3) << 24) + (o.getUint8(j + 1) << 8) + (o.getUint8(j + 2) << 16) + o.getUint8(j)
+           ui32[i] = o.getUint32(j,true)
+            j += 4
+
+        }
+
+        return ui32
+
+    }
+
+    #cutZeroes(ar32) {
+
+        var i=0
+      var  l = ar32.length
+        for ( i = l - 1; i >= 0; i--) {
+            if (ar32[i]) break
+        }
+
+        if (i < l - 1) {
+//            ar32 =
+            return NumLab.#shrinkArray(ar32, i + 1)
+
+        }
+        return ar32
+
+
+    }
+
+    DirectConvertArray8(b, nd, EntryLvl, OutputLvl) {
+
+
+        var l0s = this.countLeading0s(b)
+        //if (l0s) {            b = NumLab.#resizeBuff(b, b.byteLength,-l0s)        }
+
+        var ar = this.bytes2int32arr(b)        
+
+        NumLab.#bal2unSgn(ar);
+        ar = this.#cutZeroes(ar)
+        this.#array32toN(ar)
+        this.DirectConvert(nd, BigInt(EntryLvl), BigInt(OutputLvl))
+       //this.DirectConvert(nd, BigInt(OutputLvl), BigInt(EntryLvl))
+
+        ar = this.#n2array32()
+        NumLab.#unSgn2bal(ar)
+
+        ar= this.#cutZeroes(ar)
+
+        return this.int32arr2bytes(ar, l0s)
+
+
+
+    }
+    
 
 }
 
