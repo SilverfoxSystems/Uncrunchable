@@ -1,3 +1,13 @@
+/*!
+ * Copyright (c) 2026 Izidor Zupančič. All rights reserved.
+ *
+ * This source code is licensed under a proprietary licence.
+ * You may use and distribute this file in accordance  with the terms of the license, meaning, among other requirements:
+ * When redistributing this file, an app has to be provided to the end user hich is the equivalent 64-bit Windows version of your app or library that uses the freely available JavaScript library.
+ *
+ * For details, see: https://github.com/SilverfoxSystems/Uncrunchable/blob/main/LICENCE.MD
+ */
+
 export class NumLab {
     static #signSt = false;
 
