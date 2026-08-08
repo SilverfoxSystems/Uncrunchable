@@ -1,5 +1,5 @@
-# **Commercial Platform Compliance License  
-for _NumLab.js_ and _NumLab‑plain.js_**
+# **Commercial Platform Compliance License**
+for **_NumLab.js_** and **_NumLab‑plain.js_**
 
 **Copyright © 2026 Izidor Zupančič. All rights reserved.**
 
