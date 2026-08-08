@@ -1,8 +1,8 @@
 export class NumLab {
-    static #signSt = false
+    static #signSt = false;
 
-    #rezult  = 0n
-    #vel = 0
+    rezult = 0n;
+    #vel = 0;
     #velPoz = 0
     #IXmax = 0
     #x = 0n
@@ -116,7 +116,7 @@ export class NumLab {
         var u = this.currIX + this.bsN - 1;
 
         for (let i = this.currIX; i <= u; i++) {
-            ost = this.acc[aix] % this.x
+            ost =  this.acc[aix] % this.x
             //ost =BigInt( acc[aix] % x);
             this.acc[aix] /= this.x
 
@@ -336,8 +336,8 @@ export class NumLab {
                 if (ints[i + 1] & 0x80000000) {
                     ost = 1
 
-                //} else {
-             //       ost=0
+                    //} else {
+                    //       ost=0
                 }
 
             }
@@ -413,7 +413,7 @@ export class NumLab {
                     ost = 1
 
                 } else {
-    //                ost=0
+                    //                ost=0
                 }
 
 
@@ -440,24 +440,24 @@ export class NumLab {
         //    return 
     }
 
-   static #shrinkArray(ar, buffSz) {
+    static #shrinkArray(ar, buffSz) {
 
         // var tmp = new Array(buffSz + 1)
-        var tmp = new Uint32Array(buffSz )
+        var tmp = new Uint32Array(buffSz)
         //var tmp = new Int32Array(buffSz + 1)
         tmp.set(ar.subarray(0, buffSz), 0)
-       //ar =
-            return        tmp
+        //ar =
+        return tmp
     }
 
     #array32toN(dwords) {
         this.rezult = 0n
         const l = dwords.length
         //for (var i = 0; i < l; i++) {
-        for (var i = l-1; i >= 0; i--) {
+        for (var i = l - 1; i >= 0; i--) {
             //this.rezult = (this.rezult << 32n) + dwords[i]
             this.rezult <<= 32n
-            this.rezult +=  BigInt(dwords[i])
+            this.rezult += BigInt(dwords[i])
             // rezult += BigInt(dwords[i])
 
         }
@@ -473,13 +473,13 @@ export class NumLab {
         //    var bytes = []// Uint8Array// = Number(rezult & 0xffn);
         var lenn = this.#countDwords()
 
-       // var dwords = new Int32Array(lenn)
-       var dwords = new Uint32Array(lenn)
+        // var dwords = new Int32Array(lenn)
+        var dwords = new Uint32Array(lenn)
 
-         //var dwords = []
+        //var dwords = []
         //for (let i = bsN - 2; i >= 0; i--) {
         var i = 0
-       // document.getElementById("Text11").innerHTML += "<br /> "
+        // document.getElementById("Text11").innerHTML += "<br /> "
         NumLab.#signSt = false
 
         var ost = 0
@@ -518,7 +518,7 @@ export class NumLab {
             //                    document.getElementById("Text11").innerHTML += " " + dwords[i].toString(16)
             i++
             if (i > dwords.length) { this.#enlargeArray(dwords, dwords.length + 8) }
-         //   }
+            //   }
         }
 
         //dwords.reverse()
@@ -587,10 +587,10 @@ export class NumLab {
             throw new Error("Entry and output levels must not match.")
         };
 
-        if ((EntryLvl<3)) {
+        if ((EntryLvl < 3)) {
             throw new Error("Entry level cannot be less than three.")
         }
-        if ((OutputLvl <3)) {
+        if ((OutputLvl < 3)) {
             throw new Error("Output level cannot be less than three.")
         }
 
@@ -665,7 +665,7 @@ export class NumLab {
         }
     }
 
-    DirectConvertArray32(ar, nd,EntryLvl,OutputLvl ) {
+    DirectConvertArray32(ar, nd, EntryLvl, OutputLvl) {
 
         NumLab.#bal2unSgn(ar)
 
@@ -691,7 +691,7 @@ export class NumLab {
             //if (vi.getUint8[i]) break
             if (b0[i]) break
         }
-        return u-i-1
+        return u - i - 1
     }
 
     int32arr2bytes(ui32, leading0s) {
@@ -707,7 +707,7 @@ export class NumLab {
         var offset = 3 - i
 
         //var arB = ui32.buffer
-        var arB = new ArrayBuffer(bCnt, {maxByteLength:bCnt+0xffff})// - offset + leading0s)
+        var arB = new ArrayBuffer(bCnt, { maxByteLength: bCnt + 0xffff })// - offset + leading0s)
         var vi = new DataView(arB)
 
         for (i = 0; i < uiCnt; i++) {
@@ -716,58 +716,63 @@ export class NumLab {
             //vi.get
         }
         //var bbbbbbbbb = new Uint8Array(arB)
-       // bbbbbbbbb.set(ui32,0)
-    
-        
+        // bbbbbbbbb.set(ui32,0)
 
-      var  dif = leading0s - offset
-        
+
+
+        var dif = leading0s - offset
+
         if (dif) {
 
-           NumLab. #resizeBuff(arB, bCnt, - offset + leading0s)
+            NumLab.#resizeBuff(arB, bCnt, - offset + leading0s)
         }
 
         return arB
 
     }
 
-    static #resizeBuff(arB,currSize,dif) {
+    static #resizeBuff(arB, currSize, dif) {
 
-         var vi;
-         const oldData = new Uint8Array(arB)
+        var vi;
+        const oldData = new Uint8Array(arB)
 
-         arB.resize(currSize+dif)
-vi = new Uint8Array(arB)
-if (dif < 0) {
-    vi.set(oldData.subarray(0, vi.length))
+        //arB.resize(currSize + dif)
+        var arb1 = new ArrayBuffer(currSize+dif)
+        
 
-} else if (dif > 0) {
-    vi.set(oldData)
-}
+        vi = new Uint8Array(arb1)
+        if (dif < 0) {
+            vi.set(oldData.subarray(0, vi.length))
+
+        } else if (dif > 0) {
+            vi.set(oldData)
+        }
+
+        arB=arb1
 
     }
 
     bytes2int32arr(b) {
 
-        
+
         const bCnt = b.byteLength
         var ost = bCnt & 3
         //bCnt += 4 - ost
         if (ost) {
-            NumLab.#resizeBuff(b, bCnt, +4 - ost+1)
+            NumLab.#resizeBuff(b, bCnt, +4 - ost + 1)
         }
 
-        var uiCnt =1+ Math.floor(bCnt / 4)
+        var uiCnt = 1 + Math.floor(bCnt / 4)
 
         var ui32 = new Uint32Array(uiCnt)
         var j = 0
         var o = new DataView(b)
         if (ost == 0) { uiCnt -= 1 }
         //for (var i = uiCnt-1; i >= 0; i--) {
-            for (var i = 0; i < uiCnt; i++) {
-          //  j = i << 2
+        for (var i = 0; i < uiCnt; i++) {
+            //  j = i << 2
             //ui32[i] = (o.getUint8(j + 3) << 24) + (o.getUint8(j + 1) << 8) + (o.getUint8(j + 2) << 16) + o.getUint8(j)
-           ui32[i] = o.getUint32(j,true)
+            ui32[i] = o.getUint32(j, true)
             j += 4
 
         }
@@ -778,14 +783,14 @@ if (dif < 0) {
 
     #cutZeroes(ar32) {
 
-        var i=0
-      var  l = ar32.length
-        for ( i = l - 1; i >= 0; i--) {
+        var i = 0
+        var l = ar32.length
+        for (i = l - 1; i >= 0; i--) {
             if (ar32[i]) break
         }
 
         if (i < l - 1) {
-//            ar32 =
+            //            ar32 =
             return NumLab.#shrinkArray(ar32, i + 1)
 
         }
@@ -800,25 +805,401 @@ if (dif < 0) {
         var l0s = this.countLeading0s(b)
         //if (l0s) {            b = NumLab.#resizeBuff(b, b.byteLength,-l0s)        }
 
-        var ar = this.bytes2int32arr(b)        
+        var ar = this.bytes2int32arr(b)
 
         NumLab.#bal2unSgn(ar);
         ar = this.#cutZeroes(ar)
         this.#array32toN(ar)
         this.DirectConvert(nd, BigInt(EntryLvl), BigInt(OutputLvl))
-       //this.DirectConvert(nd, BigInt(OutputLvl), BigInt(EntryLvl))
+        //this.DirectConvert(nd, BigInt(OutputLvl), BigInt(EntryLvl))
 
         ar = this.#n2array32()
         NumLab.#unSgn2bal(ar)
 
-        ar= this.#cutZeroes(ar)
+        ar = this.#cutZeroes(ar)
 
         return this.int32arr2bytes(ar, l0s)
 
 
 
     }
-    
+
+
+    balanced64ArrayToN(arr) {
+
+        this.rezult = 0n
+        for (let i = 0; i < arr.length; i++) {
+            let d = arr[i];
+
+            if (d === -0x8000000000000000n) {
+                d = 0x8000000000000000n;
+            }
+
+            this.rezult += d << (64n * BigInt(i));
+
+        }
+
+
+
+
+
+    }
+
+
+
+    bigIntToBalanced64Array() {
+            const digits = [];
+
+            const BASE = 1n << 64n;
+            const LIMB_MASK = BASE - 1n;
+            const POS_2_63 = 1n << 63n;
+            const NEG_2_63 = -POS_2_63;
+
+
+
+        while (this.rezult) {
+            // extract 64-bit digit
+            let d = this.rezult & LIMB_MASK;
+
+                // convert to signed range [-2^63, +2^63]
+                if (d >= POS_2_63) {
+                    d -= BASE; // map to negative range
+                }
+
+                // map +2^63 → -2^63 for BigInt64Array storage
+                if (d === POS_2_63) {
+                    d = NEG_2_63;
+                }
+
+                digits.push(d);
+
+            this.rezult = this.rezult >= 0n ? this.rezult >> 64n : (this.rezult + BASE) >> 64n;
+            //this.rezult >>= 64n;
+            }
+
+            return new BigInt64Array(digits);
+        }
+
+
+
+
+
+
+    #bigIntToBalanced64Array() {
+        const BASE = 1n << 64n;
+        const LIMB_MASK = BASE - 1n;
+        const POS_2_63 = 1n << 63n;
+        const NEG_2_63 = -POS_2_63;
+
+        //let x = this.rezult;
+        const limbs = [];
+
+        while (this.rezult) {
+            // extract raw 64-bit chunk
+            let d = this.rezult & LIMB_MASK;
+
+            // convert to balanced range [-2^63, +2^63]
+            if (d >= POS_2_63) {
+                d -= BASE;
+            }
+
+            // balanced digit +2^63 must be stored as -2^63
+            if (d === POS_2_63) {
+                d = NEG_2_63;
+            }
+
+            limbs.push(d);
+            //this.rezult >>= 64n;
+
+            this.rezult = this.rezult >= 0n ? this.rezult >> 64n : (this.rezult + BASE) >> 64n
+        }
+        //        x = x >= 0n ? x >> 64n : (x + BASE) >> 64n
+        return new BigInt64Array(limbs);
+    }
+
+
+
+    ByteArrayBufferToN(buf) {
+
+    var len = buf.byteLength;
+        var ost = len & 7
+        //len += 4 - ost
+        if (ost) {
+            NumLab.#resizeBuff(buf, len, +8 - ost + 1)
+        }
+        len = buf.byteLength;
+
+        const view = new DataView(buf);
+
+    const NEG_2_63 = -0x8000000000000000n;  // -2^63
+    const POS_2_63 = 0x8000000000000000n;  // +2^63
+    const BASE = 0x10000000000000000n; // 2^64
+
+        this.rezult = 0n;
+    let factor = 1n; // BASE^0, BASE^1, ...
+
+    for (let offset = 0; offset < len-8; offset += 8) {
+        const lo = BigInt(view.getUint32(offset, true));
+        const hi = BigInt(view.getInt32(offset + 4, true)); // signed high half
+
+        let d = (hi << 32n) | lo;
+
+        if (d === NEG_2_63) {
+            d = POS_2_63;
+        }
+
+        this.rezult += d * factor;
+        factor *= BASE;
+    }
 
 }
 
+
+
+ByteArrayBufferToNold2(buf) {
+    const view = new DataView(buf);
+    const len = buf.byteLength;
+
+     rezult = 0n;
+    let shift = 0n;
+
+    const NEG_2_63 = -0x8000000000000000n;
+    const POS_2_63 = 0x8000000000000000n;
+    const BASE = 0x10000000000000000n; // 2^64
+
+    for (let offset = 0; offset < len; offset += 8) {
+        const lo = BigInt(view.getUint32(offset, true));
+        const hi = BigInt(view.getInt32(offset + 4, true)); // signed
+
+        // signed 64-bit limb
+        let d = (hi << 32n) | lo;
+
+        // fix stored +2^63 (encoded as -2^63)
+        if (d === NEG_2_63) {
+            d = POS_2_63;
+        }
+
+        // accumulate in balanced base 2^64
+        rezult += d * (BASE ** (offset / 8));
+    }
+
+    return result;
+}
+
+
+ByteArrayBufferToNold(buf) {
+    const view = new DataView(buf);
+    const len = buf.byteLength;
+
+
+
+     rezult = 0n;
+    let shift = 0n;
+
+
+    var ost =len & 7
+    //bCnt += 4 - ost
+   // if (ost) {
+      //  NumLab.#resizeBuff(arb, arb.length, +8 - ost + 1)
+   // }/
+
+    for (let offset = 0; offset < len; offset += 8) {
+        // read as unsigned 64-bit little-endian
+        const lo = BigInt(view.getUint32(offset, true));
+        const hi = BigInt(view.getUint32(offset + 4, true));
+
+        const limb = (hi << 32n) | lo;
+
+        rezult += limb << shift;
+        shift += 64n;
+    }
+
+   // let i = offset
+
+//    if (ost) {
+
+   //     for (offset = 0; offset < ost; offset ++) {
+
+    //}
+   // return result;
+}
+
+    //0x80000000
+    //0x7fffffff
+
+
+
+bigIntToBalancedArrayBuffer(l0s) {
+    const BASE =  0x80000000// 1n << 64n;
+    const LIMB_MASK = 0x7fffffff// BASE - 1n;
+    const POS_2_63 = 1n << 63n;
+    const NEG_2_63 = -POS_2_63;
+
+    //let x = N;
+    const limbs = [];
+
+
+    
+    while (this.rezult) {
+        // extract 64-bit limb
+        let d = this.rezult & LIMB_MASK;
+
+        // convert to balanced range [-2^63, +2^63]
+        if (d >= POS_2_63) {
+            d -= BASE;
+        }
+
+        // map +2^63 → -2^63 for storage (BigInt64Array/DataView)
+        if (d === POS_2_63) {
+            d = NEG_2_63;
+        }
+
+        limbs.push(d);
+        rezult >>= 64n;
+    }
+
+    // allocate buffer
+    const buf = new ArrayBuffer(l0s+limbs.length * 8);
+    const view = new DataView(buf);
+
+    // write limbs little-endian
+    for (let i = 0; i < limbs.length; i++) {
+        const d = limbs[i];
+
+        // split into hi/lo halves
+        const lo = Number(d & 0xFFFFFFFFn);
+        const hi = Number((d >> 32n) & 0xFFFFFFFFn);
+
+        view.setUint32(i * 8, lo, true);
+        view.setInt32(i * 8 + 4, hi, true); // signed high half
+    }
+
+    return buf;
+}
+
+
+
+    DirectConvertArray64(ar, nd, EntryLvl, OutputLvl) {
+
+
+        this.balanced64ArrayToN(ar)
+//        this.#array32toN(ar)
+        this.DirectConvert(nd, BigInt(EntryLvl), BigInt(OutputLvl))
+        
+        return this.bigIntToBalanced64Array() //this.int32arr2bytes(ar, l0s)
+
+
+
+    }
+
+    array64toBytesArrayBuff(ar, l0s) {
+
+
+        //var tester = 255 << 56
+        //var i = 0
+        //var tested = ar[ar.length - 1]
+        //for (i = 3; i >= 0; i--) {
+           // if (tested & tester) break
+            //tester >>= 8
+        // }
+        var l = ar.length
+        var offset = this.countLeading0s64(ar[l-1]) //8-i
+
+
+        var dif = l0s - offset
+        var le = l * 8 + dif
+
+        var arB = new ArrayBuffer(le, { maxByteLength: le + 0xffff })
+        var vi = new DataView(arB)
+        var j=0
+        var i=0
+        if (dif < 0) {
+
+            for (i = 0; i < l - 1; i++) {
+                vi.setUint32(j, Number(ar[i] & 0xffffffffn), true)
+                vi.setUint32(j + 4, Number((ar[i] >> 32n) & 0xffffffffn), true)
+                j += 8
+
+            }
+
+
+            let a = ar[i]
+
+            for (i = 0; i < 8 + dif; i++) {
+
+                vi.setUint8(j, Number(a & 0xffn),true)
+                a >>= 8n
+           j++
+            }
+
+
+        //    while (a) {
+            // NumLab.#resizeBuff(arB, bCnt, - offset + leading0s)
+        } else {
+            //if (dif>0) {
+
+            for (i = 0; i < l; i++) {
+                vi.setUint32(j, Number(ar[i] & 0xffffffffn),true)
+                vi.setUint32(j + 4, Number((ar[i] >> 32n) & 0xffffffffn),true)
+                j += 8
+
+            }
+
+        }
+
+        return arB
+
+    }
+
+    countLeading0s64(a) {
+        var count = 0
+
+        let hi32 = Number((BigInt( a) >> 32n) & 0xFFFFFFFFn);
+        if (hi32 === 0) {
+            count += 4;
+        } else {
+            if ((hi32 & 0xFF000000) === 0) count++;
+            if ((hi32 & 0x00FF0000) === 0) count++;
+            if ((hi32 & 0x0000FF00) === 0) count++;
+            if ((hi32 & 0x000000FF) === 0) count++;
+            //return count;
+        }
+
+        // then low 32 bits
+        let lo32 = Number(a & 0xFFFFFFFFn);
+        if (lo32 === 0) {
+            count += 4;
+            // return count;
+        } else {
+            if ((lo32 & 0xFF000000) === 0) count++;
+            if ((lo32 & 0x00FF0000) === 0) count++;
+            if ((lo32 & 0x0000FF00) === 0) count++;
+            if ((lo32 & 0x000000FF) === 0) count++;
+        }
+              return count;
+
+
+    }
+
+
+    DirectConvertByteArrayBuff(arb, nd, EntryLvl, OutputLvl) {
+
+
+        var l0s = this.countLeading0s(arb)
+
+        
+        this.ByteArrayBufferToN(arb)
+
+        this.DirectConvert(nd, BigInt(EntryLvl), BigInt(OutputLvl))
+
+var i64=  this.bigIntToBalanced64Array()//.bigIntToBalancedArrayBuffer(l0s)
+
+
+
+        return this.array64toBytesArrayBuff(i64,l0s)
+
+    }
+
+}
+
+            
