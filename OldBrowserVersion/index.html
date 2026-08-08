@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Unifier</title>
+    <meta name="description" content="Unify numbers" />
+    <meta name="keywords" content="Numbers, Combine, Dimensions, Pack, Vectorize, Decompose, Convert" />
+
+</head>
+<body onload="ldUp()">  
+
+    <br />
+    Array of numbers:
+    <input id="Text1" size="75" type="text" value="0,0,1" />
+    <button id="btnU" onclick="unify(event)">Unify</button>
+    <br />
+    <br />
+    N dimensions: <input id="nd" size="6" type="text" value="3" />
+    <br />
+
+    Number base: <input id="lvl" type="number" min="3" value="3" />   <button onclick="xchgLvl(event)"><></button> Number base #2: <input id="lvlOut" type="number" min="3" value="3" />
+    <button id="btnD" onclick="dConv(event)">Direct convert</button>
+
+    <br />
+    <br />
+    Unified nr: <input size="75" id="n1" type="text" value="1" />
+    <button id="btnR" onclick="resolve(event)">Resolve</button>
+    <br />
+    <input type="checkbox" id="hexOut" /><label for="hexOut">Hexadecimal output</label>
+
+    <br />
+    <br />
+    <a href="javascript:showHlp(event)">Show help</a>
+    <br />
+
+    <div id="help" style="display:none">
+        <i>Number base #2</i> is used only in <i>Direct Convert</i>
+        <br />
+        <br />
+
+        Clicking "Unify" button or pressing Enter in the top textbox unifies the array and outputs into the bottom box.
+        <br />
+        <br />
+        "Resolve" is the reverse operation, outputs into he top box
+        <br />
+        <br />
+        "Direct convert" performs the following:
+        <br />
+        Resolves in <i>Base #1</i>,
+
+        <br />
+        unifies the resulting coordinates using <i>Base #2</i>.
+        <br />
+        Overwrites the value in the bottom textbox.
+        <br />
+        <br />
+        Numbers in top and bottom textboxes can be of any length.
+        <br />
+        <i>N dimensions</i> recommended values from 1 to 300 (higher values increase the duration of computations)
+        <br />
+        <i>Base number</i> #1 and #2 should in range from 3 to 2^64
+        <br />
+        <br />
+        All numbers can also be entered in hexadecimal.
+        <br />
+        <br />
+        <br />
+        Encryption/Decryption based on Direct Convert function is available, also a Windows app (alond with .dll library) is nearly ready, which runs faster than the web app. Still, it takes about 5 seconds to encrypt around 50 kB of data. Windows app won't be free. Online app will remain free.'
+
+    </div>
+
+    <script src="uncrunchable-plain.js" defer ></script>
+    <script src="NumLab-plain.js" defer ></script>
+
+    <script defer>
+
+
+
+
+        function showHlp(ev) {
+            document.getElementById("help").style.display = "block"
+
+
+
+        }
+
+        function xchgLvl(ev) {
+
+
+            ev.preventDefault()
+
+
+            const el = document.getElementById("lvl")
+            const el2 = document.getElementById("lvlOut")
+
+            const v = el.value
+            el.value = el2.value
+            el2.value = v
+
+
+        }
+
+        
+
+        function test() {
+
+            //const unc = new NumLab()
+            const currentByteLen = 28
+            let ba = new ArrayBuffer(currentByteLen, { maxByteLength: currentByteLen + 0xffff })
+
+            let vi = new DataView(ba)
+            vi.setUint8(0, 24)
+            vi.setUint8(7, 255)
+            vi.setUint8(20, 24)
+            vi.setUint8(5, 24)
+            vi.setUint8(27, 0x80)
+            let b = Encrypt(ba, 2, 3, 4)
+            ba = Decrypt(b, 2, 3, 4)
+            //let b = unc.DirectConvertArray8(ba, 3, 4, 5)
+            //            ba = unc.DirectConvertArray8(b, 3, 5, 4)
+
+            //43 84    3f
+        }
+
+
+        function dConv(ev) {
+
+            //var kuracodovce=5
+            ev.preventDefault()
+            //const unc = new NumLab()
+            var el = document.getElementById("n1")
+            assignNumberFromString(el.value)
+            const txLvl = document.getElementById("lvl")
+            const txLvlOut = document.getElementById("lvlOut")
+            const txND = document.getElementById("nd")
+
+            try {
+                let nd = Number(txND.value)
+                let lvl = BigInt(txLvl.value)
+                let lvlOut = BigInt(txLvlOut.value)
+                let n = DirectConvert(nd, lvl, lvlOut)
+
+                if (document.getElementById("hexOut").checked) {
+                    if (n < 0) {
+                        el.value = "-0x" + (-n).toString(16)
+
+                    } else {
+
+                        el.value = "0x" + n.toString(16)
+                    }
+
+                } else {
+
+                    el.value = n
+                }
+
+            } catch (e) {
+                showErr(e.message)
+            }
+
+
+        }
+
+
+        function showErr(s) {
+            alert(s)
+        }
+
+
+
+
+
+        function unify(ev) {
+            ev.preventDefault()
+            // const unc = new NumLab
+
+            var el = document.getElementById("Text1")
+            var l = el.value.split(",").length
+            document.getElementById("nd").value = l
+
+            const lvl = document.getElementById("lvl")
+
+            let retval = assignNumArrayFromString(el.value)
+
+            if (retval == "") {
+                try {
+
+                    var n = toNumber(lvl.value)
+
+                    el = document.getElementById("n1");
+                    if (document.getElementById("hexOut").checked) {
+                        if (n < 0) {
+                            el.value = "-0x" + (-n).toString(16)
+
+                        } else {
+
+                            el.value = "0x" + n.toString(16)
+                        }
+
+                    } else {
+
+                        el.value = n
+                    }
+
+                    //                el.value = n
+
+                } catch (er) {
+                    showErr(er.message)
+
+                }
+
+
+            } else {
+                showErr(retval)
+
+            }
+
+
+
+
+        }
+
+        function resolve(ev) {
+            //const unc = new NumLab;
+            var el = document.getElementById("n1");
+            const txLvl = document.getElementById("lvl");
+            const txND = document.getElementById("nd");
+
+            ev.preventDefault();
+            var retval = assignNumberFromString(el.value);
+
+            if (retval == "") {
+
+                //try {
+                const nd = txND.value
+                const lvl = BigInt(txLvl.value)
+
+                var arr = toPointND(nd, lvl)
+                el = document.getElementById("Text1")
+                //      el.value=arr
+                let i = nd - 1
+
+                // document.getElementById("Text1").value =
+                let s = arr[i].toString()
+
+                for (i = nd - 2; i >= 0; i--) {
+
+                    //document.getElementById("Text11").innerText += ", " + arr[i]
+                    s += ", " + arr[i]
+
+
+                }
+                document.getElementById("Text1").value = s
+
+                // } catch (er) {
+                //      showErr(er.message)
+                //   }
+
+            } else {
+                showErr(retval)
+
+            }
+
+
+
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        function ldUp() {
+            var input = document.getElementById('Text1');
+
+            input.addEventListener('keydown', function (event) {
+
+                if (event.key === 'Enter') {
+                    //   unify()
+                    document.getElementById('btnU').click()
+
+                }
+            });
+
+            input = document.getElementById('n1');
+
+            input.addEventListener('keydown', function (event) {
+
+                if (event.key === 'Enter') {
+                    document.getElementById('btnR').click()
+                    //                resolve()
+                }
+            });
+
+
+            document.getElementById("Text1").focus()
+
+            //test()
+
+        }
+
+
+
+
+    </script>
+
+</body>
+</html>
